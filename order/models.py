@@ -9,8 +9,7 @@ class Order(models.Model):
         ('completed', 'Completed'),
         ('canceled', 'Canceled'),
     ]
-
-    user = models.ForeignKey(ClientModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(ClientModel, on_delete=models.CASCADE, related_name="orders")
     product = models.ManyToManyField(Product) 
     quantity = models.PositiveIntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
