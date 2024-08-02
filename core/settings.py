@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters',
 
     # locale apps
     "cafe.apps.CafeConfig",
@@ -66,8 +67,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
+    'TITLE': 'Midas Project\'s API',
+    'DESCRIPTION': 'The backend part was developed by Aslonbek',
     'VERSION': '1.0.0',
     # Qo'shimcha sozlamalar kerak bo'lsa, qo'shishingiz mumkin
 }

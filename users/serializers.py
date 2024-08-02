@@ -4,25 +4,16 @@ from rest_framework.serializers import ModelSerializer
 from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .logics_user import send_verification_email
 import random
-from datetime import timezone
 
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField(max_length=15)
-#     password = serializers.CharField(max_length=150) 
-
-# class TokenSerializer(serializers.Serializer):
-#     access = serializers.CharField()
-#     refresh = serializers.CharField()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label='Confirm password')
-
     class Meta:
         model = ClientModel
         fields = ('username', 'phone', 'email', 'password', 'password2')
@@ -75,23 +66,6 @@ class ResendVerificationCodeSerializer(serializers.Serializer):
         return {"detail": "A new verification code has been sent."}
     
 
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ClientModel
-#         feilds = ["username", "first_name", "last_name", "phone", "email"]
-    
-#     def validate_email(self, value):
-#         user = self.context['request'].user
-#         if ClientModel.objects.filter(email=value).exclude(id=user.id).exists():
-#             raise serializers.ValidationError("This email is already in use.")
-#         return value
-    
-#     def update(self, instance, validated_data):
-#         instance.username = validated_data.get('username', instance.email)
-#         instance.first_name = validated_data.get('first_name', instance.content)
-#         instance.last_name = validated_data.get('last_name', instance.created)
-#         instance.save()
-#         return instance
 
 class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,9 +107,5 @@ class ResetPasswordSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
-    
-    
-    
 
 

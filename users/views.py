@@ -91,31 +91,6 @@ class ResendPasswordView(generics.GenericAPIView):
         return Response(message, status=status.HTTP_200_OK)
 
 
-# class ClientProfileView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request):
-#         client = request.user
-#         serializer = ClientProfileSerializer(client)
-#         return Response(serializer.data)
-
-#     def put(self, request):
-#         client = request.user
-#         serializer = ClientProfileSerializer(client, data=request.data, partial=False)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def patch(self, request):
-#         client = request.user
-#         serializer = ClientProfileSerializer(client, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ClientProfileUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ClientModel.objects.all()
     serializer_class = ClientProfileSerializer
