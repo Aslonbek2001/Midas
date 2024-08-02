@@ -19,7 +19,6 @@ class ClientModel(AbstractUser):
     email = models.EmailField(unique=True, db_index=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=False)
     location = models.CharField(max_length=250, null=True, blank=True)
     phone = models.CharField(verbose_name="Client phone", db_index=True, max_length=20, unique=True, null=True)
 

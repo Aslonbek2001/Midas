@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # locale apps
     "cafe.apps.CafeConfig",
     "users.apps.UsersConfig",
+    "order.apps.OrderConfig",
 
 ]
 

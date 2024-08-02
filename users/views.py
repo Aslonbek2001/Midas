@@ -58,8 +58,6 @@ class VerifyCodeView(generics.GenericAPIView):
         verification_code.is_verified = True
         verification_code.save()
         
-        user.is_active = True
-        user.save()
 
         refresh = RefreshToken.for_user(user)
         return Response({

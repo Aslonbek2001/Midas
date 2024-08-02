@@ -70,8 +70,8 @@ class ResendVerificationCodeSerializer(serializers.Serializer):
 class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientModel
-        fields = ['id', 'username', 'email',  'first_name', 'last_name', 'rule', 'location', 'phone', 'is_active']
-        read_only_fields = ['id', 'is_active', 'rule']  # 'is_active' va 'rule' o'zgarishiga yo'l qo'ymaslik
+        fields = ['id', 'username', 'email',  'first_name', 'last_name', 'rule', 'location', 'phone']
+        read_only_fields = ['id',  'rule']  # 'rule' o'zgarishiga yo'l qo'ymaslik
 
     def validate_email(self, value):
         user = self.context['request'].user
