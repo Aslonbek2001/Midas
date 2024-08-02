@@ -9,6 +9,10 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .logics_user import send_verification_email
 import random
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import update_last_login
+
+ClientModel = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -39,7 +43,8 @@ class VerifyCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(max_length=6)
 
-class ResendVerificationCodeSerializer(serializers.Serializer):
+
+class SendVerificationCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate(self, data):
@@ -86,26 +91,40 @@ class ClientProfileSerializer(serializers.ModelSerializer):
         return value
 
 
-class ResetPasswordSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
-    password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label='Confirm password')
-
-    class Meta:
-        model = ClientModel
-        fields = ('email', 'password', 'password2')
-        extra_kwargs = {'password': {'write_only': True}}
+class ResetPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    new_password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label='Confirm password')
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Passwords must match."})
+        if attrs['new_password'] != attrs['new_password2']:
+            raise serializers.ValidationError({"new_password": "Passwords must match."})
         return attrs
 
-    def update(self, validated_data):
-        email = validated_data['email']
-        user = ClientModel.objects.get(email=email)
-        user.set_password(validated_data['password'])
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    new_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    new_password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label='Confirm new password')
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Hozirgi parol noto'g'ri.")
+        return value
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['new_password2']:
+            raise serializers.ValidationError({"new_password": "Yangi parollar mos kelmayapti."})
+        return attrs
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
         user.save()
+        update_last_login(None, user)
         return user
-
-
-
