@@ -3,6 +3,7 @@ import os
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    status = models.BooleanField(default=True)
     slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
