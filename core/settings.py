@@ -8,11 +8,19 @@ SECRET_KEY = 'django-insecure-l9j&#9l^5u8h)2h9wc)nii413@n)q*7jjoae2_6zi)u7$r))4u
 
 DEBUG = True
 
+
 ALLOWED_HOSTS = [
-        "https://raximov.pythonanywhere.com/",
-        "http://localhost:8080",
-        "http://127.0.0.1:9000",
-    ]
+    "raximov.pythonanywhere.com",
+    "localhost",
+    "127.0.0.1",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://raximov.pythonanywhere.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+]
+
 
 
 
@@ -89,13 +97,6 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-# CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    "https://raximov.pythonanywhere.com/",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
-]
 
 
 WSGI_APPLICATION = 'core.wsgi.application'
