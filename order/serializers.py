@@ -2,11 +2,6 @@ from rest_framework import serializers
 from .models import Order, OrderItem
 from users.serializers import ClientProfileSerializer
 
-# class OrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Order
-#         fields = ['id', 'user', 'product', 'quantity', 'total_price', 'status', 'order_date']
-
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:

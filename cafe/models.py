@@ -25,6 +25,7 @@ class Product(models.Model):
         upload_to='products/%Y/%m/%d',
         blank=True
     )
+    famous = models.BooleanField(default=False)
     weight = models.IntegerField(verbose_name="Product og'irligi")
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)

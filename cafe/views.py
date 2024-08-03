@@ -26,7 +26,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdminUser]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['category', "available"]
+    filterset_fields = ['category', "available", "famous"]
     search_fields = ['name', 'description']
 
     def get_permissions(self):
