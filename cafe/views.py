@@ -39,6 +39,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminUser]
+    
 
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
@@ -51,7 +52,8 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdminUser]
-    filterset_fields = ['name']
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['status']
     search_fields = ['name']
 
     def get_permissions(self):
