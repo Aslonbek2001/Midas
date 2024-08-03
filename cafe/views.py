@@ -1,38 +1,63 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Category
+from .serializers import ProductSerializer, CategorySerializer
 from .pagination import CustomPageNumberPagination
-from .permissions import IsAuthorOrReadOnly
+from .permissions import  IsStaffPermission
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 
-# class ProductListView(generics.ListAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     pagination_class = CustomPageNumberPagination
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthorOrReadOnly | IsAdminUser]
+    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAdminUser()]
+        return [AllowAny()]
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = CustomPageNumberPagination
-    permission_classes = [IsAuthorOrReadOnly | IsAdminUser]
+    permission_classes = [IsAdminUser]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['category', "available"]
     search_fields = ['name', 'description']
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        discount_not_null = self.request.query_params.get('discount_not_null')
-        if discount_not_null:
-            queryset = queryset.exclude(discount=None)
-        return queryset
+    def get_permissions(self):
+        if self.request.method in ['POST']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+
+
+class CategoryListCreateView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAdminUser]
+    filterset_fields = ['name']
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.request.method in ['POST']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+
 
 

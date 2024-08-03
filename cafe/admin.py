@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Category, Product
+import os
 # Register your models here.
 
 
@@ -23,4 +24,3 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['available', 'created', 'updated','discount',]
     list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
-

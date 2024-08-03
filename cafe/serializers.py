@@ -9,7 +9,7 @@ from rest_framework import exceptions
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        feilds = ("name", "slug")
+        fields = "__all__"
 
 
 

@@ -1,5 +1,5 @@
 from django.db import models
-
+import os
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -45,4 +45,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def delete(self, *args, **kwargs):
+        # Rasmni o'chirish
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super(Product, self).delete(*args, **kwargs)
 

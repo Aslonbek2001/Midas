@@ -16,7 +16,6 @@ urlpatterns = [
     path("api/reset-password/", ResetPasswordView.as_view(), name="reset-password"),
     path('api/profile/', ClientProfileUpdateView.as_view(), name='client-profile'),
     path('profile/change-password/', ChangePasswordView.as_view(), name='change-password'),
-    
 
     # Token
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
