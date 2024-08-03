@@ -21,6 +21,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
 ]
 
+# settings.py
+STRIPE_SECRET_KEY = 'sk_test_51PjcRqIIDOuV803oBQ4VljZWNCOdh5Z9ttQ6fGLy7XKOy86Xv8JfnkUqixIwu9f2p8O9mKUn8NO2WQ6OodMvk0yc00kjVD7kIR'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51PjcRqIIDOuV803oOlf5PdqU3Boh0pmVRdb1pQGVqUnwwZ2j7xPhi25N0Yv46ETzZ10AKuegQXcshOq3z0KM3LIN00xn7sY8St'
 
 
 
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     "cafe.apps.CafeConfig",
     "users.apps.UsersConfig",
     "order.apps.OrderConfig",
+    "payment.apps.PaymentConfig"
 
 ]
 

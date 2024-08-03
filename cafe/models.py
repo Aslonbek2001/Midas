@@ -19,6 +19,10 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    STATE_CHOICES = [
+        ('hot', 'Hot'),
+        ('cold', 'cold'),
+    ]
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200)
@@ -26,6 +30,7 @@ class Product(models.Model):
         upload_to='products/%Y/%m/%d',
         blank=True
     )
+    hot_cold = models.CharField(max_length=4, choices=STATE_CHOICES, null=True, blank=True)
     famous = models.BooleanField(default=False)
     weight = models.IntegerField(verbose_name="Product og'irligi")
     description = models.TextField(blank=True)
