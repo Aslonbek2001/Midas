@@ -19,7 +19,8 @@ class ProductAdmin(admin.ModelAdmin):
         'discount',
         'available',
         'created',
-        'updated'
+        'updated',
+        'hot_cold'
     ]
     list_filter = ['available', 'created', 'updated','discount',]
     list_editable = ['price', 'available']
