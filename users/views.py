@@ -47,7 +47,7 @@ class VerifyCodeView(generics.GenericAPIView):
 
         try:
             user = ClientModel.objects.get(email=email)
-            verification_code = VerificationCode.objects.get(user=user, code=code)
+            verification_code = VerificationCode.objects.get(user=user, code=code).last()
         except (ClientModel.DoesNotExist, VerificationCode.DoesNotExist):
             return Response({"detail": "Invalid email or verification code."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,7 +73,7 @@ class VerifyCodeView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
-####################  Verify Code     ##########################
+####################  Send Verification Code  ##########################
 class SendVerificationCodeView(generics.GenericAPIView):
     serializer_class = SendVerificationCodeSerializer
 
@@ -128,11 +128,11 @@ class ChangePasswordView(APIView):
         responses={
             200: OpenApiResponse(
                 response=ChangePasswordSerializer,
-                description='Parol muvaffaqiyatli o\'zgartirildi.'
+                description='Password changed successfully.'
             ),
             400: OpenApiResponse(
                 response=None,
-                description='Xato: Kirish ma\'lumotlari noto\'g\'ri.'
+                description='Error: Invalid login information.'
             )
         }
     )
@@ -141,5 +141,5 @@ class ChangePasswordView(APIView):
         serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response({"detail": "Parol muvaffaqiyatli o'zgartirildi."}, status=status.HTTP_200_OK)
+            return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

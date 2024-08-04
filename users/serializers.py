@@ -47,26 +47,13 @@ class VerifyCodeSerializer(serializers.Serializer):
 class SendVerificationCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
-    def validate(self, data):
-        email = data['email']
-        try:
-            user = ClientModel.objects.get(email=email)
-            verification_code = VerificationCode.objects.get(user=user)
-            verification_code.delete()
-        except (ClientModel.DoesNotExist, VerificationCode.DoesNotExist):
-            raise serializers.ValidationError({"detail": "User or verification code not found."})
-
-        if verification_code.is_verified:
-            raise serializers.ValidationError({"detail": "This email is already verified."})
-        
-        if verification_code.end_time > timezone.now():
-            raise serializers.ValidationError({"detail": "A verification code has been sent."})
-
-        return data
-    
     def save(self, **kwargs):
         email = self.validated_data['email']
-        user = ClientModel.objects.get(email=email)
+        try:
+            user = ClientModel.objects.get(email=email)
+        except ClientModel.DoesNotExist:
+            raise serializers.ValidationError({"detail": "User not found."})
+        
         send_verification_email(user)
         return {"detail": "A new verification code has been sent."}
     
@@ -76,7 +63,7 @@ class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientModel
         fields = ['id', 'username', 'email',  'first_name', 'last_name', 'rule', 'location', 'phone']
-        read_only_fields = ['id',  'rule']  # 'rule' o'zgarishiga yo'l qo'ymaslik
+        read_only_fields = ['id',  'rule'] 
 
     def validate_email(self, value):
         user = self.context['request'].user
