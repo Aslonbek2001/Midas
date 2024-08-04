@@ -19,3 +19,6 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+class SearchSerializer(serializers.Serializer):
+    query = serializers.CharField(required=True, help_text="Qidiruv so'zi")
