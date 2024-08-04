@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-l9j&#9l^5u8h)2h9wc)nii413@n)q*7jjoae2_6zi)u7$r))4u'
 
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = [
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "cafe.apps.CafeConfig",
     "users.apps.UsersConfig",
     "order.apps.OrderConfig",
-    "payment.apps.PaymentConfig"
+    # "payment.apps.PaymentConfig"
 
 ]
 

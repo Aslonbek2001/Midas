@@ -47,7 +47,7 @@ class VerifyCodeView(generics.GenericAPIView):
 
         try:
             user = ClientModel.objects.get(email=email)
-            verification_code = VerificationCode.objects.get(user=user, code=code).last()
+            verification_code = VerificationCode.objects.filter(user=user).order_by('-id').first()
         except (ClientModel.DoesNotExist, VerificationCode.DoesNotExist):
             return Response({"detail": "Invalid email or verification code."}, status=status.HTTP_400_BAD_REQUEST)
 

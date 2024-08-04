@@ -7,7 +7,7 @@ from rest_framework.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .logics_user import send_verification_email
+from .logics_user import send_verification_email, check_phone
 import random
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import update_last_login
@@ -26,6 +26,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Passwords must match."})
+        
+        phone = attrs["phone"]
+
+        if check_phone(phone=phone):
+            raise serializers.ValidationError({"phone": "The phone number is incorrect"})
+            
         return attrs
 
     def create(self, validated_data):
@@ -42,6 +48,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class VerifyCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(max_length=6)
+
+    def validate(self, data):
+        code = data["code"]
+        if len(code) != 6:
+            raise serializers.ValidationError({"code": "Code is not correct"})
+        return super().validate(data)
 
 
 class SendVerificationCodeSerializer(serializers.Serializer):
@@ -62,8 +74,8 @@ class SendVerificationCodeSerializer(serializers.Serializer):
 class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientModel
-        fields = ['id', 'username', 'email',  'first_name', 'last_name', 'rule', 'location', 'phone']
-        read_only_fields = ['id',  'rule'] 
+        fields = ['id', 'username', 'email',  'first_name', 'last_name', 'location', 'phone']
+        read_only_fields = ['id'] 
 
     def validate_email(self, value):
         user = self.context['request'].user
@@ -101,12 +113,12 @@ class ChangePasswordSerializer(serializers.Serializer):
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError("Hozirgi parol noto'g'ri.")
+            raise serializers.ValidationError("The current password is incorrect.")
         return value
 
     def validate(self, attrs):
         if attrs['new_password'] != attrs['new_password2']:
-            raise serializers.ValidationError({"new_password": "Yangi parollar mos kelmayapti."})
+            raise serializers.ValidationError({"new_password": "The new passwords do not match."})
         return attrs
 
     def save(self, **kwargs):
