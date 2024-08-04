@@ -14,7 +14,6 @@ from django.contrib.auth.models import update_last_login
 
 ClientModel = get_user_model()
 
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label='Confirm password')
@@ -26,12 +25,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Passwords must match."})
-        
+
         phone = attrs["phone"]
 
-        if check_phone(phone=phone):
+        if not check_phone(phone=phone):
             raise serializers.ValidationError({"phone": "The phone number is incorrect"})
-            
+
         return attrs
 
     def create(self, validated_data):
@@ -44,7 +43,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.save()
         send_verification_email(user)
         return user
-    
+
 class VerifyCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(max_length=6)
@@ -53,8 +52,7 @@ class VerifyCodeSerializer(serializers.Serializer):
         code = data["code"]
         if len(code) != 6:
             raise serializers.ValidationError({"code": "Code is not correct"})
-        return super().validate(data)
-
+        return data
 
 class SendVerificationCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -65,17 +63,15 @@ class SendVerificationCodeSerializer(serializers.Serializer):
             user = ClientModel.objects.get(email=email)
         except ClientModel.DoesNotExist:
             raise serializers.ValidationError({"detail": "User not found."})
-        
+
         send_verification_email(user)
         return {"detail": "A new verification code has been sent."}
-    
-
 
 class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientModel
-        fields = ['id', 'username', 'email',  'first_name', 'last_name', 'location', 'phone']
-        read_only_fields = ['id'] 
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'location', 'phone']
+        read_only_fields = ['id']
 
     def validate_email(self, value):
         user = self.context['request'].user
@@ -87,6 +83,11 @@ class ClientProfileSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if ClientModel.objects.filter(phone=value).exclude(id=user.id).exists():
             raise serializers.ValidationError("This phone number is already in use.")
+
+        # Telefon raqamining formatini tekshirish va xatolikni tashlash
+        if not check_phone(phone=value):
+            raise serializers.ValidationError("This phone number is incorrect.")
+        
         return value
 
 
@@ -103,7 +104,6 @@ class ResetPasswordSerializer(serializers.Serializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
-
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})

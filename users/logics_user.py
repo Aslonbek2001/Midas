@@ -23,6 +23,6 @@ def send_verification_email(user):
 def check_phone(phone):
     uz_phone_regex = r'^\+998\d{9}$'
     if re.match(uz_phone_regex, phone):
-        return False
-    else:
         return True
+    else:
+        return False

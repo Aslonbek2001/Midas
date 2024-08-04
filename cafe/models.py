@@ -58,3 +58,7 @@ class Product(models.Model):
             os.remove(self.image.path)
         super(Product, self).delete(*args, **kwargs)
 
+    def get_price(self):
+        if self.discount:
+            return self.price - self.discount
+        return self.price
