@@ -37,7 +37,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)  # Yangi buyurtmani yaratuvchi foydalanuvchini belgilash
 
 
-class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateAPIView):
+class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]

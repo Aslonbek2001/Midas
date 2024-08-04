@@ -28,7 +28,7 @@ STRIPE_PUBLISHABLE_KEY = 'pk_test_51PjcRqIIDOuV803oOlf5PdqU3Boh0pmVRdb1pQGVqUnww
 
 
 INSTALLED_APPS = [
-    "daphne",
+    # "daphne",
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -104,8 +104,9 @@ SIMPLE_JWT = {
 
 
 
-# WSGI_APPLICATION = 'core.wsgi.application'
-ASGI_APPLICATION = 'core.asgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
+
+# ASGI_APPLICATION = 'core.asgi.application'
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -115,11 +116,11 @@ ASGI_APPLICATION = 'core.asgi.application'
 #     },
 # }
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
 
 DATABASES = {
     'default': {

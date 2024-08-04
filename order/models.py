@@ -1,5 +1,5 @@
 from django.db import models
-from cafe.models import Product, Category
+from cafe.models import Product
 from users.models import ClientModel
 
 

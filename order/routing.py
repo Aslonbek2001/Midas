@@ -1,7 +1,7 @@
-# routing.py
-from django.urls import re_path
-from order import consumers
+# # routing.py
+# from django.urls import re_path
+# from order import consumers
 
-websocket_urlpatterns = [
-    re_path(r'ws/orders/$', consumers.OrderConsumer.as_asgi()),
-]
+# websocket_urlpatterns = [
+#     re_path(r'ws/orders/$', consumers.OrderConsumer.as_asgi()),
+# ]
