@@ -52,8 +52,12 @@ class OrderSerializer(serializers.ModelSerializer):
         count = 0
         total_price = 0
         for item in order_items:
+            item_product = item['product']
+            item_quantity = item['quantity']
+            item['price'] = item_product.get_price() * item_quantity
             count += item['quantity']
             total_price += item['price']
+
         data['quantity'] = count
         data['total_price'] = total_price
         return data
