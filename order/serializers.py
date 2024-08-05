@@ -6,9 +6,10 @@ from cafe.models import Product
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['product', 'quantity', 'price']
+        fields = ['id','product', 'quantity', 'price']
         extra_kwargs = {
             'price': {'read_only': True},
+            'id': {'read_only': True},
         }
 
     def validate(self, data):
