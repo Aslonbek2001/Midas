@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Order, OrderItem
 from users.serializers import ClientProfileSerializer
 from cafe.models import Product
-
+from cafe.serializers import ProductSerializer
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
@@ -64,3 +64,22 @@ class OrderSerializer(serializers.ModelSerializer):
         for order_item_data in order_items_data:
             OrderItem.objects.create(order=order, **order_item_data)
         return order
+
+
+
+class ProductForItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'image']
+
+
+class ItemsListSerializer(serializers.ModelSerializer):
+    product = ProductForItemSerializer()
+    class Meta:
+        model = OrderItem
+        fields = ['id','product', 'quantity', 'price']
+        extra_kwargs = {
+            'price': {'read_only': True},
+            'id': {'read_only': True},
+        }
+
