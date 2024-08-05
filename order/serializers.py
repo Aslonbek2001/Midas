@@ -54,7 +54,18 @@ class OrderSerializer(serializers.ModelSerializer):
         for item in order_items:
             item_product = item['product']
             item_quantity = item['quantity']
-            item['price'] = item_product.get_price() * item_quantity
+            if item_quantity <= 0:
+                raise serializers.ValidationError("Product quantity must be greater than zero.")
+            
+            # item['price'] = item_product.get_price() * item_quantity
+            # Agar Product modelida get_price metodi mavjud bo'lsa, uni ishlatish
+            
+            if hasattr(item_product, 'get_price'):
+                item_price = item_product.get_price() * item_quantity
+            else:
+                item_price = item_product.price * item_quantity
+                
+            item['price'] = item_price
             count += item['quantity']
             total_price += item['price']
 
