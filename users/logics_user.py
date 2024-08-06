@@ -1,6 +1,7 @@
 import random
 from django.core.mail import send_mail
 from .models import VerificationCode
+from django.core.exceptions import ObjectDoesNotExist
 import re
 
 def generate_verification_code():
@@ -8,8 +9,16 @@ def generate_verification_code():
 
 def send_verification_email(user):
     code = generate_verification_code()
-    verfy = VerificationCode.objects.get(user=user)
-    verfy.delete()
+    try:
+        # Foydalanuvchi uchun mavjud bo'lgan verifikatsiya kodini olish
+        verfy = VerificationCode.objects.get(user=user)
+        # Mavjud bo'lsa, uni o'chirish
+        verfy.delete()
+    except ObjectDoesNotExist:
+        # Agar verifikatsiya kodi mavjud bo'lmasa, hech narsa qilmaymiz
+        pass
+
+    # Yangi verifikatsiya kodini yaratish
     VerificationCode.objects.create(user=user, code=code)
     send_mail(
         'Your Verification Code',
