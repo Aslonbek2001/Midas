@@ -7,18 +7,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-l9j&#9l^5u8h)2h9wc)nii413@n)q*7jjoae2_6zi)u7$r))4u'
 
 DEBUG = False
+CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = [
-    "raximov.pythonanywhere.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://raximov.pythonanywhere.com",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
-]
+
 
 # settings.py
 STRIPE_SECRET_KEY = 'sk_test_51PjcRqIIDOuV803oBQ4VljZWNCOdh5Z9ttQ6fGLy7XKOy86Xv8JfnkUqixIwu9f2p8O9mKUn8NO2WQ6OodMvk0yc00kjVD7kIR'
